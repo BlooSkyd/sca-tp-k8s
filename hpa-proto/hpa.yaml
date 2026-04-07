@@ -1,0 +1,32 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: api-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: hpa-deployment
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 20      # Attendre 5 min avant scale down
+      policies:
+      - type: Pods
+        value: 1                          # Réduire de 1 pod par période
+        periodSeconds: 5
+    scaleUp:
+      stabilizationWindowSeconds: 5       # Scale up immédiat (ou presque)
+      policies:
+      - type: Pods
+        value: 2                          # Ajouter 2 pods
+        periodSeconds: 15
+      selectPolicy: Max

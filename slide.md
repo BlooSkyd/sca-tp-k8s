@@ -21,3 +21,8 @@ kubectl get hpa
 kubectl get pods -w
 
  curl http://localhost:52103/stress (attention au port)
+
+
+
+kubectl get pods -w ou kubectl get all
+puis : kubectl logs -f <nom-du-pod>
